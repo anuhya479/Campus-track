@@ -5,12 +5,15 @@ const {
     getTasks,
     getTask,
     updateTask,
-    deleteTask
+    deleteTask,
+    getTaskStats
 } = require('../controllers/task.controller');
 
 const { protect } = require('../middleware/auth');
 
 router.use(protect);
+
+router.get('/stats', getTaskStats);
 
 router.route('/')
     .get(getTasks)

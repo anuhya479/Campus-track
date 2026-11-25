@@ -169,3 +169,74 @@ exports.deleteTask = asyncHandler(async (req, res) => {
 
     res.status(204).send();
 });
+
+// ASSIGNMENT STATISTICS
+exports.getTaskStats = asyncHandler(async (req, res) => {
+
+    const stats = await Task.aggregate([
+        {
+            $match: {
+                user: req.user._id
+            }
+        },
+        {
+            $group: {
+                _id: null,
+
+                total: { $sum: 1 },
+
+                pending: {
+                    $sum: {
+                        $cond: [
+                            { $eq: ['$status', 'todo'] },
+                            1, 0
+                        ]
+                    }
+                },
+
+                inProgress: {
+                    $sum: {
+                        $cond: [
+                            { $eq: ['$status', 'in-progress'] },
+                            1, 0
+                        ]
+                    }
+                },
+
+                completed: {
+                    $sum: {
+                        $cond: [
+                            { $eq: ['$status', 'done'] },
+                            1, 0
+                        ]
+                    }
+                }
+            }
+        }
+    ]);
+
+    const priorityStats = await Task.aggregate([
+        {
+            $match: {
+                user: req.user._id
+            }
+        },
+        {
+            $group: {
+                _id: '$priority',
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+
+    res.json({
+        success: true,
+        statistics: stats[0] || {
+            total: 0,
+            pending: 0,
+            inProgress: 0,
+            completed: 0
+        },
+        priorityStats
+    });
+});
