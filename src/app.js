@@ -1,4 +1,7 @@
 const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 
 const authRoutes = require('./routes/auth.routes');
 const taskRoutes = require('./routes/task.routes');
@@ -11,8 +14,26 @@ const {
 
 const app = express();
 
+// SECURITY MIDDLEWARE
+app.use(helmet());
+app.use(cors());
+
+// RATE LIMITING
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: {
+        success: false,
+        message: 'Too many requests. Try again later.'
+    }
+});
+
+app.use('/api', limiter);
+
+// JSON BODY PARSER
 app.use(express.json({ limit: '10kb' }));
 
+// HOME ROUTE
 app.get('/', (req, res) => {
     res.json({
         message: 'Welcome to CampusTrack',
@@ -20,6 +41,7 @@ app.get('/', (req, res) => {
     });
 });
 
+// HEALTH CHECK
 app.get('/health', (req, res) => {
     res.json({
         status: 'ok',
