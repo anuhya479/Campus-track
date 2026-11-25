@@ -2,6 +2,7 @@ const express = require('express');
 
 const authRoutes = require('./routes/auth.routes');
 const taskRoutes = require('./routes/task.routes');
+const userRoutes = require('./routes/user.routes');
 
 const {
     notFound,
@@ -26,9 +27,12 @@ app.get('/health', (req, res) => {
     });
 });
 
+// API ROUTES
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/users', userRoutes);
 
+// ERROR HANDLING
 app.use(notFound);
 app.use(errorHandler);
 
