@@ -105,8 +105,8 @@ exports.getTasks = asyncHandler(async (req, res) => {
         Task.find(filter)
             .sort(sortBy)
             .skip(skip)
-            .limit(limit),
-
+            .limit(limit)
+            .lean(),
         Task.countDocuments(filter)
     ]);
 
@@ -154,7 +154,7 @@ exports.updateTask = asyncHandler(async (req, res) => {
         throw new AppError('Assignment not found', 404);
 
     res.json({ success: true, task });
-});exports.getTasks
+});
 
 // DELETE ASSIGNMENT
 exports.deleteTask = asyncHandler(async (req, res) => {
