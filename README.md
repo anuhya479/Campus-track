@@ -175,3 +175,42 @@ solution for student assignment management.
 The application demonstrates REST API development,
 database integration, authentication, CRUD operations,
 validation, database indexing and automated testing.
+## Additional Features
+
+### Assignment Statistics
+- Total number of assignments
+- Pending assignments
+- In-progress assignments
+- Completed assignments
+- Priority-wise statistics
+
+Endpoint: GET /api/tasks/stats
+
+### Role-Based Access Control (RBAC)
+- Supports User and Admin roles.
+- Normal users can manage their own assignments.
+- Admins can access the registered user list.
+- Unauthorized access is restricted.
+
+Endpoint: GET /api/users (Admin only)
+
+### Security
+- JWT-based authentication
+- Password hashing using bcrypt
+- Helmet for secure HTTP headers
+- CORS middleware
+- API rate limiting (100 requests per 15 minutes)
+- Input validation and error handling
+
+### Query Optimization
+- MongoDB compound indexes
+- Mongoose lean() queries
+- Filtering, searching, sorting and pagination
+
+### Automated Testing
+- 8 automated API tests passed
+- 0 failed tests
+
+Run tests using:
+
+    npm test
