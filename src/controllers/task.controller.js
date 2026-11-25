@@ -103,6 +103,7 @@ exports.getTasks = asyncHandler(async (req, res) => {
 
     const [tasks, total] = await Promise.all([
         Task.find(filter)
+            .populate('user', 'name email')
             .sort(sortBy)
             .skip(skip)
             .limit(limit)
